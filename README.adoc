@@ -87,9 +87,10 @@ http://localhost:9001/q/swagger-ui/#/
 ## Packaging and running the application
 
 The application can be packaged using:
-```shell script
+[source, shell script]
 ./mvnw package
-```
+---
+
 It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
 
 NOTE: Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
