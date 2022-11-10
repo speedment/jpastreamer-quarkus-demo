@@ -1,12 +1,13 @@
-# Quarkus JPAStreamer Demo
+= Quarkus JPAStreamer Demo
 
-This project contains a simple Spring Web application. All endpoints fetch database entries from the Sakila test database, more on in xref:_example_database[Sakila database]. The database is integrated using Hibernate with Panache and JPAStreamer, the latter both being Hibernate extensions that enrich the Hibernate API with more user-friendly query methods. As Panache, JPAStreamer does not prohibit the use of HQL queries, it only extends the application with a type-safe query API. 
+This project contains a simple Spring Web application. All endpoints fetch database entries from the Sakila test database, see xref:_example_database[Sakila database]. The database is integrated using Hibernate with Panache and JPAStreamer, the latter both being Hibernate extensions that enrich the Hibernate API with more user-friendly query methods. Like Panache, JPAStreamer does not prohibit the use of HQL queries, it only extends the application with a type-safe query API. 
 
-To run the application, your environment must comply with the following prerequisites: 
+To run the application, your environment must comply with the following prerequisites:
+
     - JDK 8 or later installed 
     - Sakila film database running on port 3306, see xref:_example_database[Sakila database]
 
-## Brief introduction to JPAStreamer 
+== Brief introduction to JPAStreamer 
 JPAStreamer is an extension to any JPA provider that allows queries to be expressing as standard Java Streams. As it turns out, the `Stream` interface introduced in Java 8, has a natural mapping to SQL that makes Stream database queries intuitive to most developers that are familiar with an imperative coding style. 
 
 Here is an example query that fetches 100 films that are longer than 2 hours, sorted alphabetically from the Sakila film database:
@@ -48,57 +49,63 @@ The `Film$` entity referenced in the `filter` and `sorted` operations is automat
 
 NOTE: The full documentation of JPAStreamer can be found link:https://speedment.github.io/jpa-streamer/jpa-streamer/1.1.0/introduction/introduction.html[here]. 
 
-## The demo application 
+== Demo application 
 To demonstrate how JPAStreamer operates, the Panache xref:src/main/java/org/speedment/repository/FilmRepository.java[`FilmRepository`] contains paired implementations of a number of queries, where the first version is expressed using the Panache API and the other using the JPAStreamer API.
 
 The JPAStreamer queries are executed via the endpoints at link:localhost:9001/jpastreamer/[localhost:9001/jpastreamer/] and the Panache queries are executed from link:localhost:9001/panache/[localhost:9001/panache/]. 
 
 [#_example_database]
-## Sakila Database 
-The demo makes use of the [MySQL Sakila database](https://dev.mysql.com/doc/sakila/en/). It can either be downloaded from Oracle as described [here](https://dev.mysql.com/doc/sakila/en/sakila-installation.html) or used directly via a [Sakila Docker instance](https://hub.docker.com/r/restsql/mysql-sakila/) by issuing the following commands:
+=== Sakila Database 
+The demo makes use of the link:https://dev.mysql.com/doc/sakila/en/[MySQL Sakila database]. It can either be downloaded from Oracle as described link:https://dev.mysql.com/doc/sakila/en/sakila-installation.html[here] or used directly via a link:https://hub.docker.com/r/restsql/mysql-sakila/[Sakila Docker instance] by issuing the following commands:
 
-```shell script
-$ docker pull restsql/mysql-sakila
-$ docker run -d --publish 3306:3306 --name mysqld restsql/mysql-sakila
-```
-
-If you wish to run the database on a different port, simply change the port in the Docker-command and update the connection link in `sr
-> **_NOTE:_**  This Docker image does not support ARM64 architecture, thus if you are running on e.g. an M1 Mac, you need to emulate an Intel image by adding the flag '--platform linux/amd64' after 'docker run' in the above command. This may not always work ideally, learn more about why at the [Docker webpage](https://docs.docker.com/desktop/mac/apple-silicon/#known-issues).
->
-
-## Running the application in dev mode
-
-Run the application in development mode with the following command: 
+[shell script]
 ----
-shell script
+$ docker pull restsql/mysql-sakila
+----
+
+[shell script]
+----
+$ docker run -d --publish 3306:3306 --name mysqld restsql/mysql-sakila
+----
+
+NOTE: This Docker image does not support ARM64 architecture, thus if you are running on e.g. an M1 Mac, you need to emulate an Intel image by adding the flag `--platform linux/amd64` after `docker run` in the above command. This may not always work ideally, learn more about why at the link:https://docs.docker.com/desktop/mac/apple-silicon/#known-issues[Docker webpage].
+
+=== Running the Application
+Run the application in development mode with the following command: 
+
+[shell script]
+----
 ./mvnw compile quarkus:dev
 ----
 
-The application runs on port 9001: 
+The application runs on port 9001:
+[shell script]
 ----
 http://localhost:9001
 ----
 
 You can explore all available endpoints here:
+[shell script]
 ----
 http://localhost:9001/q/swagger-ui/#/
 ----
-
-## Packaging and running the application
+ 
+=== Packaging and Running the Application
 
 The application can be packaged using:
 [source, shell script]
+----
 ./mvnw package
----
+----
 
 It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
 
 NOTE: Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-## Disclaimer
+== Disclaimer
 As this is an early preview of JPASteamer for Quarkus, JPAStreamer is not yet a formal Quarkus extension and therefore does not support native builds. Further the annotation processor is not yet compatible with Panache's Active Record Pattern. We released this preview to gather early feedback before progressing with the development of the JPAStreamer Quarkus extension.
 
-## Resources
+== Resources
 
 - link:https://jpastreamer.org[JPAStreamer Website]
 - link:https://speedment.github.io/jpa-streamer/jpa-streamer/1.1.0/introduction/introduction.html[JPAStreamer Documentation]
