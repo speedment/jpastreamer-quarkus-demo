@@ -136,10 +136,12 @@ public class FilmRepository implements PanacheRepository<Film> {
      */
     
     // Panache 
-    public List<Film> titleStartsWithSortedByLengthLimited(String start, int limit) {
-        return find("title like :start order by length", Parameters.with("start", start + "%"))
+    public Stream<Film> titleStartsWithSortedByLengthLimited(String start, int limit) {
+        return find("title like :start", 
+                    Sort.by("length"), 
+                    Parameters.with("start", start + "%"))
                 .range(0, limit)
-                .list();
+                .stream();
     }
 
     // JPAStreamer

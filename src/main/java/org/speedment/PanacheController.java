@@ -46,7 +46,6 @@ public class PanacheController {
     @GetMapping(value="startsWithSort")
     public String startsWithSort(@RequestParam String startsWith) {
         return filmRepository.titleStartsWithSortedByLengthLimited(startsWith, 10)
-                .stream()
                 .map(f -> String.format("<p> %s: %s min </p>", f.getTitle(), f.getLength()))
                 .collect(Collectors.joining());
     }
